@@ -37,14 +37,14 @@ jobs:
       # 👇 values.yaml 수정
       - name: Update image tag in values.yaml
         run: |
-          sed -i "s/tag: .*/tag: ${TAG}/" manifest/my-spring-kafka/values.yaml
-
+          sed -i.bak "s/tag: .*/tag: ${TAG}/" manifest/my-spring-kafka/values.yaml
+          rm manifest/my-spring-kafka/values.yaml.bak
       # 👇 commit & push
       - name: Commit and push changes
         run: |
           cd manifest
-          git config user.name "frozen-water"
-          git config user.email "frozen-water@gmail.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add my-spring-kafka/values.yaml
           git commit -m "Update image tag to ${TAG}"
           git push origin main
