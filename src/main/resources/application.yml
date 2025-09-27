@@ -1,6 +1,6 @@
 spring:
   kafka:
-    bootstrap-servers: localhost:29092   # Kafka ??? ??
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}   # Kafka ??? ??
     consumer:
       group-id: demo-group
       auto-offset-reset: earliest
