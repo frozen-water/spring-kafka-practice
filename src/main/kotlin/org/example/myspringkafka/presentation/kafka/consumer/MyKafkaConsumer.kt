@@ -11,7 +11,7 @@ class MyKafkaConsumer {
 
     @KafkaListener(
         topics = ["topic1"],
-        groupId = "group1",
+        groupId = "group2",
     )
     fun consume(
         message: String
