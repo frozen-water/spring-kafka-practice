@@ -16,6 +16,6 @@ class MyKafkaConsumer {
     fun consume(
         message: String
     ) {
-        logger.info("Consuming message: $message")
+        logger.info("Consuming message1111: $message")
     }
 }
