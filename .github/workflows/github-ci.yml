@@ -46,6 +46,7 @@ jobs:
 
       - name: Update image tag in values.yaml
         run: |
+          echo $TAG
           sed -i.bak "s/tag: .*/tag: ${TAG}/" manifest/my-spring-kafka/values.yaml
           rm manifest/my-spring-kafka/values.yaml.bak
 
