@@ -5,10 +5,11 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-update-manifest:
+  # 1️⃣ Docker 이미지 빌드 & 푸시
+  build-and-push:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read   # 코드 읽기만 필요
     steps:
       - uses: actions/checkout@v3
 
@@ -26,20 +27,28 @@ jobs:
           docker tag frozenwater1/my-spring-kafka:${TAG} frozenwater1/my-spring-kafka:latest
           docker push frozenwater1/my-spring-kafka:latest
 
-      # 👇 manifest repo clone
+      - name: Save TAG for next job
+        run: echo "TAG=${TAG}" >> $GITHUB_ENV
+
+  # 2️⃣ manifest repo 업데이트
+  update-manifest:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    permissions:
+      contents: write   # manifest repo 수정/푸시 권한 필요
+    steps:
       - name: Checkout manifest repo
         uses: actions/checkout@v3
         with:
           repository: frozen-water/spring-kafka-manifest
           path: manifest
-          token: ${{ secrets.GITHUB_TOKEN }}   # 또는 PAT
+          token: ${{ secrets.GH_PAT }}   # GITHUB_TOKEN 대신 PAT 권장
 
-      # 👇 values.yaml 수정
       - name: Update image tag in values.yaml
         run: |
           sed -i.bak "s/tag: .*/tag: ${TAG}/" manifest/my-spring-kafka/values.yaml
           rm manifest/my-spring-kafka/values.yaml.bak
-      # 👇 commit & push
+
       - name: Commit and push changes
         run: |
           cd manifest
