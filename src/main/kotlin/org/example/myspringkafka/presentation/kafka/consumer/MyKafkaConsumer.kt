@@ -11,7 +11,7 @@ class MyKafkaConsumer {
 
     @KafkaListener(
         topics = ["topic1"],
-        groupId = "group2",
+        groupId = "\${spring.kafka.consumer.group-id}",
     )
     fun consume(
         message: String
