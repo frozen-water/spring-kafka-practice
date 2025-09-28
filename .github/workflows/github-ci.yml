@@ -22,10 +22,7 @@ jobs:
 
       - name: Build and Push
         run: |
-          docker build \
-            -t frozenwater1/my-spring-kafka:latest \
-            -t frozenwater1/my-spring-kafka:${TAG} .
-          docker push frozenwater1/my-spring-kafka:latest
+          docker build -t frozenwater1/my-spring-kafka:${TAG} .
           docker push frozenwater1/my-spring-kafka:${TAG}
 
       - name: Save TAG for next job
