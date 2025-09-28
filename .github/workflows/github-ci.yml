@@ -22,9 +22,9 @@ jobs:
 
       - name: Build and Push
         run: |
-          docker build -t frozenwater1/my-spring-kafka:${TAG} .
-          docker push frozenwater1/my-spring-kafka:${TAG}
-          docker tag frozenwater1/my-spring-kafka:${TAG} frozenwater1/my-spring-kafka:latest
+          docker build -t frozenwater1/my-spring-kafka:latest .
+          docker push frozenwater1/my-spring-kafka:latest
+          docker tag frozenwater1/my-spring-kafka:latest frozenwater1/my-spring-kafka:latest
           docker push frozenwater1/my-spring-kafka:latest
 
       - name: Save TAG for next job
@@ -37,6 +37,10 @@ jobs:
     permissions:
       contents: write   # manifest repo 수정/푸시 권한 필요
     steps:
+      - name: Set Image tag
+        id: vars
+        run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
       - name: Checkout manifest repo
         uses: actions/checkout@v3
         with:
@@ -46,8 +50,7 @@ jobs:
 
       - name: Update image tag in values.yaml
         run: |
-          echo ${{ env.TAG }}
-          sed -i.bak "s/tag: .*/tag: ${{ env.TAG }}/" manifest/my-spring-kafka/values.yaml
+          sed -i.bak "s/tag: .*/tag: ${TAG}/" manifest/my-spring-kafka/values.yaml
           rm manifest/my-spring-kafka/values.yaml.bak
 
       - name: Commit and push changes
