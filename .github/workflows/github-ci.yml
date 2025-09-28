@@ -22,8 +22,8 @@ jobs:
 
       - name: Build and Push
         run: |
-          docker build -t frozenwater1/my-spring-kafka:latest .
-          docker push frozenwater1/my-spring-kafka:latest
+          docker build -t frozenwater1/my-spring-kafka:${GITHUB_SHA::7} .
+          docker push frozenwater1/my-spring-kafka:${GITHUB_SHA::7}
 
       - name: Save TAG for next job
         run: echo "TAG=${TAG}" >> $GITHUB_ENV
